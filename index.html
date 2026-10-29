@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>工作台 · 自建单文件工具</title>
+<meta name="description" content="八件自己写的小工具：粉体设备预选型、材料硬度对比、目数与微米换算、3D 创作工作台、纳瓦尔宝典读解、邓宁-克鲁格自测、元素词源卡片、日常任务清单。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231F5E4B'/></svg>">
+<style>
+  :root {
+    --paper: #F7F7F4;
+    --ink: #1B1D1A;
+    --muted: #63665E;
+    --rule: #D9D9D2;
+    --wire: #8F9288;
+    --accent: #1F5E4B;
+    --serif: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+    --sans: "Source Han Sans SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.75;
+    text-rendering: optimizeLegibility;
+  }
+
+  .sheet {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 64px 28px 88px;
+  }
+
+  /* ---------- 页头 ---------- */
+  .masthead { margin-bottom: 0; }
+
+  .title {
+    margin: 0;
+    font-size: clamp(30px, 5.6vw, 42px);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: .01em;
+  }
+
+  .lede {
+    margin: 18px 0 0;
+    max-width: 34em;
+    font-size: 17px;
+    line-height: 1.95;
+    color: var(--ink);
+  }
+
+  .lede code {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+    font-size: .88em;
+    background: #ECECE5;
+    padding: .12em .34em;
+    border-radius: 2px;
+  }
+
+  .specs {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    margin: 34px 0 0;
+    padding: 0 0 2px;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .specs > div {
+    padding: 12px 16px 12px 0;
+    border-left: 1px solid var(--rule);
+    padding-left: 16px;
+  }
+
+  .specs > div:first-child { border-left: 0; padding-left: 0; }
+
+  .specs dt {
+    font-family: var(--sans);
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: var(--muted);
+    letter-spacing: .04em;
+  }
+
+  .specs dd {
+    margin: 3px 0 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  /* ---------- 页头那道筛网（全页唯一的装饰，指向本业的「目」） ---------- */
+  .sieve {
+    height: 26px;
+    margin-top: 34px;
+    background-image: radial-gradient(circle at 50% 50%, var(--wire) 0 1.15px, transparent 1.25px);
+    background-size: 7px 7px;
+    background-position: center;
+    opacity: .85;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  /* ---------- 分组 ---------- */
+  .group { margin-top: 56px; }
+
+  .group-head {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin: 0 0 4px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--ink);
+  }
+
+  .group-head h2 {
+    margin: 0;
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: .02em;
+  }
+
+  .group-head span {
+    font-family: var(--sans);
+    font-size: 11.5px;
+    color: var(--muted);
+    letter-spacing: .03em;
+  }
+
+  .tools {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tool + .tool { border-top: 1px solid var(--rule); }
+
+  .tool > a {
+    display: grid;
+    grid-template-columns: minmax(0, 12.5em) minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 2px 26px;
+    padding: 16px 0 15px;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .tool-name {
+    font-size: 17.5px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .tool-desc {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .tool-go {
+    font-family: var(--sans);
+    font-size: 12px;
+    color: var(--muted);
+    padding-left: 10px;
+    white-space: nowrap;
+  }
+
+  .tool > a:hover .tool-name { color: var(--accent); }
+
+  .tool > a:hover .tool-name,
+  .tool > a:focus-visible .tool-name {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+  }
+
+  .tool > a:hover .tool-go,
+  .tool > a:focus-visible .tool-go { color: var(--accent); }
+
+  .tool > a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 6px;
+  }
+
+  /* ---------- 归档 ---------- */
+  .archive { margin-top: 72px; }
+
+  .archive h2 {
+    margin: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--rule);
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .archive p {
+    margin: 12px 0 0;
+    max-width: 46em;
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: var(--muted);
+  }
+
+  .archive ul {
+    margin: 10px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13.5px;
+    line-height: 2;
+    color: var(--muted);
+  }
+
+  .archive li { display: flex; flex-wrap: wrap; gap: 0 10px; }
+
+  .archive a {
+    color: var(--muted);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: #BFC1B8;
+  }
+
+  .archive a:hover { color: var(--ink); }
+
+  /* ---------- 页脚 ---------- */
+  .foot {
+    margin-top: 56px;
+    padding-top: 18px;
+    border-top: 1px solid var(--ink);
+    font-size: 13.5px;
+    line-height: 1.9;
+    color: var(--muted);
+  }
+
+  .foot a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--rule);
+  }
+
+  .foot a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ---------- 窄屏 ---------- */
+  @media (max-width: 640px) {
+    .sheet { padding: 44px 20px 64px; }
+    .lede { font-size: 16px; }
+    .specs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .specs > div { padding: 10px 12px 10px 0; }
+    .specs > div:nth-child(3) { border-left: 0; padding-left: 0; }
+    .specs > div:nth-child(3),
+    .specs > div:nth-child(4) { border-top: 1px solid var(--rule); }
+    .tool > a {
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 2px 14px;
+      padding: 14px 0 13px;
+    }
+    .tool-name { grid-column: 1; grid-row: 1; }
+    .tool-go { grid-column: 2; grid-row: 1; justify-self: end; padding-left: 0; }
+    .tool-desc { grid-column: 1 / -1; grid-row: 2; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .masthead, .sieve { animation: settle .5s ease-out both; }
+    .sieve { animation-delay: .08s; }
+    @keyframes settle {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: none; }
+    }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <header class="masthead">
+    <h1 class="title">工作台</h1>
+    <p class="lede">八件自己写的小工具，每件都是一个 <code>index.html</code>。打开就能用，断网也不影响；想留档就把页面存下来。</p>
+
+    <dl class="specs">
+      <div><dt>工具</dt><dd>8 件</dd></div>
+      <div><dt>外部依赖</dt><dd>0</dd></div>
+      <div><dt>运行方式</dt><dd>单个 HTML 文件</dd></div>
+      <div><dt>联网</dt><dd>仅打开时</dd></div>
+    </dl>
+
+    <div class="sieve" aria-hidden="true"></div>
+  </header>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>粉体与材料</h2>
+      <span>选型、硬度、粒度</span>
+    </div>
+    <ul class="tools">
+      <li class="tool">
+        <a href="https://3698688050-pixel.github.io/powder-equipment-selector/">
+          <span class="tool-name">粉体设备预选型</span>
+          <span class="tool-desc">填物料、产能、粒度与工艺属性，加权排序给出 Top3 设备；1433 条物料、48 类设备库，结果可导出 PDF。</span>
+          <span class="tool-go">打开</span>
+        </a>
+      </li>
+      <li class="tool">
+        <a href="https://3698688050-pixel.github.io/hardness-comparator/">
+          <span class="tool-name">材料硬度对比</span>
+          <span class="tool-desc">106 种材料，莫氏、维氏、洛氏、布氏、邵氏之间换算；两两比硬度，或一次加入多材料排序列。</span>
+          <span class="tool-go">打开</span>
+        </a>
+      </li>
+      <li class="tool">
+        <a href="https://3698688050-pixel.github.io/mesh-micron-converter/">
+          <span class="tool-name">目数与微米换算</span>
+          <span class="tool-desc">目数和微米双向换算，附常用对照表。</span>
+          <span class="tool-go">打开</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>3D 与图像</h2>
+      <span>建模到出图</span>
+    </div>
+    <ul class="tools">
+      <li class="tool">
+        <a href="https://3698688050-pixel.github.io/3d-workbench/">
+          <span class="tool-name">3D 创作工作台</span>
+          <span class="tool-desc">图片转 3D 的站点入口、GLB 拖入预览、GLB 点选上色并导出、文生图，四件事一个页面。</span>
+          <span class="tool-go">打开</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="group">
+    <div class="group-head">
+      <h2>阅读与自测</h2>
+      <span>没事翻一翻</span>
+    </div>
+    <ul class="tools">
+      <li class="tool">
+        <a href="https://3698688050-pixel.github.io/naval/">
+          <span class="tool-name">《纳瓦尔宝典》读解</span>
+          <span class="tool-desc">财富与幸福两个体系整理成一条回路：积累财富、增强判断力、学习幸福、自我救赎、哲学。</span>
+          <span class="tool-go">打开</span>
+        </a>
+      </li>
+      <li class="tool">
+        <a href="https://3698688050-pixel.github.io/dunning-kruger-test/">
+          <span class="tool-name">邓宁-克鲁格效应自测</span>
+          <span class="tool-desc">先凭直觉预测自己能答对几题，再答 12 道陷阱题，把预测和实际摆在一起看落差。</span>
+          <span class="tool-go">打开</span>
+        </a>
+      </li>
+      <li class="tool">
+        <a href="https://3698688050-pixel.github.io/element-origin-cards/">
+          <span class="tool-name">元素词源卡片</span>
+          <span class="tool-desc">1–36 号元素英文名从哪来，翻卡看词根拆解，按性质、神话、地名、矿物、古名分类。</span>
+          <span class="tool-go">打开</span>
+        </a>
+      </li>
+      <li class="tool">
+        <a href="https://3698688050-pixel.github.io/daily-tasks/">
+          <span class="tool-name">日常任务清单</span>
+          <span class="tool-desc">加任务、划掉、删除，进度存在本机浏览器里。</span>
+          <span class="tool-go">打开</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <section class="archive">
+    <h2>已归档的旧版</h2>
+    <p>下面四件曾经是独立工具，功能已经并进上面相应的工作台，旧网址仍然能打开，只是不再单独维护。</p>
+    <ul>
+      <li><a href="https://3698688050-pixel.github.io/pre/">pre</a><span>复合配方加权版，并入「粉体设备预选型」</span></li>
+      <li><a href="https://3698688050-pixel.github.io/Pre-selector/">Pre-selector</a><span>物料自动匹配版，并入「粉体设备预选型」</span></li>
+      <li><a href="https://3698688050-pixel.github.io/syg/">syg</a><span>GLB 在线预览，并入「3D 创作工作台」</span></li>
+      <li><a href="https://3698688050-pixel.github.io/painter/">painter</a><span>GLB 上色材质编辑，并入「3D 创作工作台」</span></li>
+    </ul>
+  </section>
+
+  <footer class="foot">
+    <p>源码都在 <a href="https://github.com/3698688050-pixel">GitHub</a>，仓库名与上面一一对应。要做新工具时，在这里加一行、在 GitHub 建一个同名仓库就够了。</p>
+  </footer>
+
+</div>
+</body>
+</html>
