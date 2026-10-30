@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>工作台 · 自建单文件工具</title>
-<meta name="description" content="八件自己写的小工具：粉体设备预选型、材料硬度对比、目数与微米换算、3D 创作工作台、纳瓦尔宝典读解、邓宁-克鲁格自测、元素词源卡片、日常任务清单。">
+<meta name="description" content="十件自己写的小工具：粉体设备预选型、材料硬度对比、目数与微米换算、粉碎词汇卡片、3D 创作工作台、纳瓦尔宝典读解、邓宁-克鲁格自测、元素词源卡片、西语第一性原理学习台、日常任务清单。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%231F5E4B'/></svg>">
 <style>
   :root {
@@ -192,48 +192,6 @@
     outline-offset: 6px;
   }
 
-  /* ---------- 归档 ---------- */
-  .archive { margin-top: 72px; }
-
-  .archive h2 {
-    margin: 0;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--rule);
-    font-family: var(--sans);
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--muted);
-  }
-
-  .archive p {
-    margin: 12px 0 0;
-    max-width: 46em;
-    font-size: 13.5px;
-    line-height: 1.75;
-    color: var(--muted);
-  }
-
-  .archive ul {
-    margin: 10px 0 0;
-    padding: 0;
-    list-style: none;
-    font-size: 13.5px;
-    line-height: 2;
-    color: var(--muted);
-  }
-
-  .archive li { display: flex; flex-wrap: wrap; gap: 0 10px; }
-
-  .archive a {
-    color: var(--muted);
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
-    text-decoration-color: #BFC1B8;
-  }
-
-  .archive a:hover { color: var(--ink); }
-
   /* ---------- 页脚 ---------- */
   .foot {
     margin-top: 56px;
@@ -290,10 +248,10 @@
 
   <header class="masthead">
     <h1 class="title">工作台</h1>
-    <p class="lede">八件自己写的小工具，每件都是一个 <code>index.html</code>。打开就能用，断网也不影响；想留档就把页面存下来。</p>
+    <p class="lede">十件自己写的小工具，每件都是一个 <code>index.html</code>。打开就能用，断网也不影响；想留档就把页面存下来。</p>
 
     <dl class="specs">
-      <div><dt>工具</dt><dd>8 件</dd></div>
+      <div><dt>工具</dt><dd>10 件</dd></div>
       <div><dt>外部依赖</dt><dd>0</dd></div>
       <div><dt>运行方式</dt><dd>单个 HTML 文件</dd></div>
       <div><dt>联网</dt><dd>仅打开时</dd></div>
@@ -305,7 +263,7 @@
   <section class="group">
     <div class="group-head">
       <h2>粉体与材料</h2>
-      <span>选型、硬度、粒度</span>
+      <span>选型、硬度、粒度、词汇</span>
     </div>
     <ul class="tools">
       <li class="tool">
@@ -326,6 +284,13 @@
         <a href="https://3698688050-pixel.github.io/mesh-micron-converter/">
           <span class="tool-name">目数与微米换算</span>
           <span class="tool-desc">目数和微米双向换算，附常用对照表。</span>
+          <span class="tool-go">打开</span>
+        </a>
+      </li>
+      <li class="tool">
+        <a href="https://3698688050-pixel.github.io/comminution-vocab/">
+          <span class="tool-name">粉碎词汇卡片</span>
+          <span class="tool-desc">工业物料与粉碎设备 70 个英文词，正面中文，翻面看英文、词根、化学式与物性。</span>
           <span class="tool-go">打开</span>
         </a>
       </li>
@@ -382,20 +347,15 @@
           <span class="tool-go">打开</span>
         </a>
       </li>
+      <li class="tool">
+        <a href="https://3698688050-pixel.github.io/spanish-first-principles/">
+          <span class="tool-name">西语第一性原理学习台</span>
+          <span class="tool-desc">从理解出发学西语：先弄清一句话为什么这样说，再做语境输入和最小记忆，不背语法表。</span>
+          <span class="tool-go">打开</span>
+        </a>
+      </li>
     </ul>
   </section>
-
-  <section class="archive">
-    <h2>已归档的旧版</h2>
-    <p>下面四件曾经是独立工具，功能已经并进上面相应的工作台，旧网址仍然能打开，只是不再单独维护。</p>
-    <ul>
-      <li><a href="https://3698688050-pixel.github.io/pre/">pre</a><span>复合配方加权版，并入「粉体设备预选型」</span></li>
-      <li><a href="https://3698688050-pixel.github.io/Pre-selector/">Pre-selector</a><span>物料自动匹配版，并入「粉体设备预选型」</span></li>
-      <li><a href="https://3698688050-pixel.github.io/syg/">syg</a><span>GLB 在线预览，并入「3D 创作工作台」</span></li>
-      <li><a href="https://3698688050-pixel.github.io/painter/">painter</a><span>GLB 上色材质编辑，并入「3D 创作工作台」</span></li>
-    </ul>
-  </section>
-
   <footer class="foot">
     <p>源码都在 <a href="https://github.com/3698688050-pixel">GitHub</a>，仓库名与上面一一对应。要做新工具时，在这里加一行、在 GitHub 建一个同名仓库就够了。</p>
   </footer>
