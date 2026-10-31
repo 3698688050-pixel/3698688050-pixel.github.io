@@ -11,7 +11,7 @@
 | 粉体与材料 | 粉体设备预选型 | [powder-equipment-selector](https://github.com/3698688050-pixel/powder-equipment-selector) |
 | 粉体与材料 | 材料硬度对比 | [hardness-comparator](https://github.com/3698688050-pixel/hardness-comparator) |
 | 粉体与材料 | 目数与微米换算 | [mesh-micron-converter](https://github.com/3698688050-pixel/mesh-micron-converter) |
-| 3D 与图像 | 3D 创作工作台 | [3d-workbench](https://github.com/3698688050-pixel/3d-workbench) |
+| 3D 与图像 | 3D 工作台 | [3d-workbench](https://github.com/3698688050-pixel/3d-workbench) |
 | 阅读与自测 | 《纳瓦尔宝典》读解 | [naval](https://github.com/3698688050-pixel/naval) |
 | 阅读与自测 | 邓宁-克鲁格效应自测 | [dunning-kruger-test](https://github.com/3698688050-pixel/dunning-kruger-test) |
 | 阅读与自测 | 元素词源卡片 | [element-origin-cards](https://github.com/3698688050-pixel/element-origin-cards) |
